@@ -4,12 +4,17 @@ import (
 	"net/http"
 
 	"github.com/byuoitav/authmiddleware"
+	"github.com/byuoitav/monster-monitoring-service/badger"
 	"github.com/byuoitav/monster-monitoring-service/handlers"
+	"github.com/byuoitav/monster-monitoring-service/helpers"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
+
+	//initialize the badger store
+	badger.Init()
 
 	//get the status of every room and building from Configuration-Database
 	helpers.OnStart()
