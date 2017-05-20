@@ -60,11 +60,128 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/aws/aws-sdk-go/aws",
+			"repository": "https://github.com/aws/aws-sdk-go",
+			"vcs": "git",
+			"revision": "31484500fe77b88dbe197c6348358ed275aed5d7",
+			"branch": "master",
+			"path": "/aws",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/aws/aws-sdk-go/private/protocol",
+			"repository": "https://github.com/aws/aws-sdk-go",
+			"vcs": "git",
+			"revision": "31484500fe77b88dbe197c6348358ed275aed5d7",
+			"branch": "master",
+			"path": "private/protocol",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/aws/aws-sdk-go/service/kms",
+			"repository": "https://github.com/aws/aws-sdk-go",
+			"vcs": "git",
+			"revision": "31484500fe77b88dbe197c6348358ed275aed5d7",
+			"branch": "master",
+			"path": "service/kms",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/aws/aws-sdk-go/service/s3",
+			"repository": "https://github.com/aws/aws-sdk-go",
+			"vcs": "git",
+			"revision": "31484500fe77b88dbe197c6348358ed275aed5d7",
+			"branch": "master",
+			"path": "service/s3",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/aws/aws-sdk-go/service/sts",
+			"repository": "https://github.com/aws/aws-sdk-go",
+			"vcs": "git",
+			"revision": "31484500fe77b88dbe197c6348358ed275aed5d7",
+			"branch": "master",
+			"path": "service/sts",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/aws/aws-sdk-go/vendor/github.com/go-ini/ini",
+			"repository": "https://github.com/aws/aws-sdk-go",
+			"vcs": "git",
+			"revision": "31484500fe77b88dbe197c6348358ed275aed5d7",
+			"branch": "master",
+			"path": "vendor/github.com/go-ini/ini",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/aws/aws-sdk-go/vendor/github.com/jmespath/go-jmespath",
+			"repository": "https://github.com/aws/aws-sdk-go",
+			"vcs": "git",
+			"revision": "31484500fe77b88dbe197c6348358ed275aed5d7",
+			"branch": "master",
+			"path": "vendor/github.com/jmespath/go-jmespath",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/bkaradzic/go-lz4",
 			"repository": "https://github.com/bkaradzic/go-lz4",
 			"vcs": "git",
 			"revision": "7224d8d8f27ef618c0a95f1ae69dbb0488abc33a",
 			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/byuoitav/authmiddleware/bearertoken",
+			"repository": "https://github.com/byuoitav/authmiddleware",
+			"vcs": "git",
+			"revision": "288cae87239d315c1db72dabdedda2f1c6b06ddb",
+			"branch": "master",
+			"path": "/bearertoken",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/byuoitav/av-api/base",
+			"repository": "https://github.com/byuoitav/av-api",
+			"vcs": "git",
+			"revision": "2212f856b7bb2cd5f55a86d629f89f190f472609",
+			"branch": "master",
+			"path": "/base",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/byuoitav/av-api/dbo",
+			"repository": "https://github.com/byuoitav/av-api",
+			"vcs": "git",
+			"revision": "2212f856b7bb2cd5f55a86d629f89f190f472609",
+			"branch": "master",
+			"path": "/dbo",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/byuoitav/configuration-database-microservice/accessors",
+			"repository": "https://github.com/byuoitav/configuration-database-microservice",
+			"vcs": "git",
+			"revision": "0548e0158fead5ed94002d4a3cf45a9eb8a1207b",
+			"branch": "master",
+			"path": "/accessors",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/byuoitav/configuration-database-microservice/vendor/github.com/go-sql-driver/mysql",
+			"repository": "https://github.com/byuoitav/configuration-database-microservice",
+			"vcs": "git",
+			"revision": "0548e0158fead5ed94002d4a3cf45a9eb8a1207b",
+			"branch": "master",
+			"path": "vendor/github.com/go-sql-driver/mysql",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/byuoitav/event-router-microservice/eventinfrastructure",
+			"repository": "https://github.com/byuoitav/event-router-microservice",
+			"vcs": "git",
+			"revision": "622816119fb7e24fe2f027a79e57eb46a0c5daa5",
+			"branch": "master",
+			"path": "/eventinfrastructure",
 			"notests": true
 		},
 		{
@@ -256,6 +373,24 @@
 			"vcs": "git",
 			"revision": "dcecefd839c4193db0d35b88ec65b4c12d360ab0",
 			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/xuther/go-message-router/common",
+			"repository": "https://github.com/xuther/go-message-router",
+			"vcs": "git",
+			"revision": "643f0df22553492f20c3932aaac8cbbd51b7d54d",
+			"branch": "master",
+			"path": "/common",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/xuther/go-message-router/publisher",
+			"repository": "https://github.com/xuther/go-message-router",
+			"vcs": "git",
+			"revision": "643f0df22553492f20c3932aaac8cbbd51b7d54d",
+			"branch": "master",
+			"path": "publisher",
 			"notests": true
 		},
 		{
