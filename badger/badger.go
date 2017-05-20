@@ -26,3 +26,6 @@ func UpdateStoreByEvent(event eventinfrastructure.Event) error {
 	log.Printf("Updating store by event from device: %s...", event.Event.Device)
 	return nil
 }
+
+func Listen() {
+}

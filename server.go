@@ -13,11 +13,14 @@ import (
 
 func main() {
 
-	//initialize the badger store
+	//initialize the badger store and channel
 	badger.Init()
 
 	//get the status of every room and building from Configuration-Database
 	helpers.OnStart()
+
+	//listen for events
+	go badger.Listen()
 
 	port := ":10000"
 	router := echo.New()
