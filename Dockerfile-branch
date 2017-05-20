@@ -1,0 +1,17 @@
+FROM golang:alpine
+
+ARG GITHUB_BRANCH
+
+RUN apk update && apk add git
+RUN go get -u github.com/FiloSottile/gvt
+
+RUN mkdir -p /go/src/github.com/byuoitav
+ADD . /go/src/github.com/byuoitav/monster-monitoring-service
+
+WORKDIR /go/src/github.com/byuoitav/monster-monitoring-service
+RUN go get -d -v
+RUN go install -v
+
+CMD ["/go/bin/monster-monitoring-service"]
+
+EXPOSE 10000
