@@ -2,6 +2,14 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/AndreasBriese/bbloom",
+			"repository": "https://github.com/AndreasBriese/bbloom",
+			"vcs": "git",
+			"revision": "0320de81a58b973b5187098f4815608711c70f3b",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/GeertJohan/go.incremental",
 			"repository": "https://github.com/GeertJohan/go.incremental",
 			"vcs": "git",
@@ -52,6 +60,14 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/bkaradzic/go-lz4",
+			"repository": "https://github.com/bkaradzic/go-lz4",
+			"vcs": "git",
+			"revision": "7224d8d8f27ef618c0a95f1ae69dbb0488abc33a",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/daaku/go.zipexe",
 			"repository": "https://github.com/daaku/go.zipexe",
 			"vcs": "git",
@@ -66,6 +82,14 @@
 			"revision": "346938d642f2ec3594ed81d874461961cd0faa76",
 			"branch": "master",
 			"path": "/spew",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/dgraph-io/badger",
+			"repository": "https://github.com/dgraph-io/badger",
+			"vcs": "git",
+			"revision": "b50cd8fea7346291e2e79dabeac44393ac1b89fd",
+			"branch": "master",
 			"notests": true
 		},
 		{
@@ -195,6 +219,14 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/pkg/errors",
+			"repository": "https://github.com/pkg/errors",
+			"vcs": "git",
+			"revision": "c605e284fe17294bda444b34710735b29d1a9d90",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/rsc/letsencrypt",
 			"repository": "https://github.com/rsc/letsencrypt",
 			"vcs": "git",
@@ -242,6 +274,24 @@
 			"revision": "513929065c19401a1c7b76ecd942f9f86a0c061b",
 			"branch": "master",
 			"path": "/context",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/net/internal/timeseries",
+			"repository": "https://go.googlesource.com/net",
+			"vcs": "git",
+			"revision": "513929065c19401a1c7b76ecd942f9f86a0c061b",
+			"branch": "master",
+			"path": "internal/timeseries",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/net/trace",
+			"repository": "https://go.googlesource.com/net",
+			"vcs": "git",
+			"revision": "513929065c19401a1c7b76ecd942f9f86a0c061b",
+			"branch": "master",
+			"path": "/trace",
 			"notests": true
 		},
 		{

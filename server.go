@@ -10,6 +10,10 @@ import (
 )
 
 func main() {
+
+	//get the status of every room and building from Configuration-Database
+	helpers.OnStart()
+
 	port := ":10000"
 	router := echo.New()
 	router.Pre(middleware.RemoveTrailingSlash())
