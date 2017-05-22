@@ -15,10 +15,6 @@ import (
 	"github.com/dgraph-io/badger/table"
 )
 
-func Init() {
-
-}
-
 func UpdateStoreByRoom(input base.PublicRoom) error {
 
 	log.Printf("Updating store by room: %s in building: %s...", input.Room, input.Building)
@@ -67,12 +63,6 @@ func UpdateStoreByEvent(event eventinfrastructure.Event) error {
 	Store().Set(key, value)
 
 	return nil
-}
-
-func Listen() {
-
-	//writes store to disk
-	Store().Close()
 }
 
 //convert stuff to byte array

@@ -4,23 +4,24 @@ import (
 	"net/http"
 
 	"github.com/byuoitav/authmiddleware"
-	"github.com/byuoitav/monster-monitoring-service/badger"
 	"github.com/byuoitav/monster-monitoring-service/handlers"
 	"github.com/byuoitav/monster-monitoring-service/helpers"
+	"github.com/byuoitav/monster-monitoring-service/salt"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
 
-	//initialize the badger store and channel
-	badger.Init()
-
 	//get the status of every room and building from Configuration-Database
 	helpers.OnStart()
 
+	//
+	timer := make(chan bool, 1)
+	go salt.Start(timer)
+
 	//listen for events
-	go badger.Listen()
+	go salt.Listen()
 
 	port := ":10000"
 	router := echo.New()
