@@ -1,9 +1,14 @@
 package salt
 
 import (
+	"bufio"
+	"crypto/tls"
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/byuoitav/monster-monitoring-service/badger"
@@ -11,6 +16,67 @@ import (
 
 func Listen() {
 
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: transport}
+
+	req, err := http.NewRequest("GET", os.Getenv("SALT_MASTER_ADDRESS")+"/events", nil)
+	if err != nil {
+		log.Printf("Cannot open request %s", err.Error())
+		return
+	}
+
+	req.Header.Add("X-Auth-Token", Connection().Token)
+
+	Connection().Response, err = client.Do(req)
+	if err != nil {
+		log.Printf("Error sending Request %s", err.Error())
+		return
+	}
+
+	reader := bufio.NewReader(Connection().Response.Body)
+	for {
+
+		if Connection().Response.Close {
+			log.Printf("Detected closed salt connection. Exiting...")
+			break
+		}
+
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatal("Error reading event" + err.Error())
+		} else {
+			if strings.Contains(line, "retry") {
+				continue
+			} else if strings.Contains(line, "tag") {
+
+				line2, err := reader.ReadString('\n')
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				if strings.Contains(line2, "data") {
+
+					jsonString := line2[5:]
+					var event SaltEvent
+
+					err := json.Unmarshal([]byte(jsonString), &event)
+					if err != nil {
+						log.Fatal("Error unmarshalling event" + err.Error())
+					}
+
+					err = badger.UpdateStoreBySalt(event)
+					if err != nil {
+						log.Printf("Error writing to badger store: %s", err.Error())
+					}
+
+				}
+			} else if len(line) < 1 {
+				continue
+			}
+		}
+	}
 }
 
 func Start(timer chan bool) {
@@ -23,7 +89,8 @@ func Start(timer chan bool) {
 	log.Printf("SIGTERM interrupt detected. Exiting...")
 
 	badger.Store().Close()
-	(*Connection().Connection).Close()
+	//(*Connection().Connection).Close()
+	Connection().Response.Body.Close()
 	os.Exit(0)
 
 }

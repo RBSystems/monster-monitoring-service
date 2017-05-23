@@ -11,9 +11,14 @@ import (
 
 	"github.com/byuoitav/av-api/base"
 	"github.com/byuoitav/event-router-microservice/eventinfrastructure"
+	"github.com/byuoitav/monster-monitoring-service/salt"
 	"github.com/dgraph-io/badger/badger"
 	"github.com/dgraph-io/badger/table"
 )
+
+func UpdateStoreBySalt(event salt.SaltEvent) error {
+	return nil
+}
 
 func UpdateStoreByRoom(input base.PublicRoom) error {
 

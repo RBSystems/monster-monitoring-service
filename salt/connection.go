@@ -6,16 +6,15 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"net"
 	"net/http"
 	"os"
 	"sync"
 )
 
 type SaltConnection struct {
-	Token      string
-	Expires    float64
-	Connection *net.Conn
+	Token    string
+	Expires  float64
+	Response *http.Response
 }
 
 type LoginResponse struct {
@@ -25,6 +24,9 @@ type LoginResponse struct {
 	Start       float64  `json:"start,omitempty"`
 	Token       string   `json:"token,omitempty"`
 	User        string   `json:"user,omitempty"`
+}
+
+type SaltEvent struct {
 }
 
 //singleton instance of salt connection

@@ -13,14 +13,12 @@ import (
 
 func main() {
 
-	//get the status of every room and building from Configuration-Database
 	helpers.OnStart()
 
-	//
 	timer := make(chan bool, 1)
+
 	go salt.Start(timer)
 
-	//listen for events
 	go salt.Listen()
 
 	port := ":10000"
