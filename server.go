@@ -20,6 +20,7 @@ func main() {
 	store.OnStart()
 
 	var control sync.WaitGroup
+	NUM_PROCESSES := 2
 
 	signals := make(chan os.Signal, 1)
 	timer := make(chan bool, 1)
@@ -27,13 +28,15 @@ func main() {
 
 	go func() {
 		<-signals
-		timer <- true
+		for i := 0; i < NUM_PROCESSES; i++ {
+			timer <- true
+		}
 		control.Wait()
 		os.Exit(0)
 	}()
 
 	events := make(chan salt.SaltEvent)
-	control.Add(2)
+	control.Add(NUM_PROCESSES)
 	go salt.Listen(events, timer, control)
 	go store.Listen(events, timer, control)
 

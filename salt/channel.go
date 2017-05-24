@@ -13,7 +13,7 @@ import (
 
 func Listen(events chan SaltEvent, done chan bool, signal sync.WaitGroup) {
 
-	var once *sync.Once
+	var read, listener *sync.Once
 
 	for {
 		select {
@@ -22,8 +22,8 @@ func Listen(events chan SaltEvent, done chan bool, signal sync.WaitGroup) {
 			Connection().Response.Body.Close()
 			break
 		default:
-			once.Do(connect)
-			listenSalt(events)
+			read.Do(connect)
+			listener.Do(func() { go listenSalt(events) })
 		}
 	}
 	signal.Done()
@@ -56,37 +56,40 @@ func connect() {
 
 func listenSalt(events chan SaltEvent) {
 
-	if Connection().Response.Close {
-		log.Printf("Detected closed salt connection. Reconnecting...")
-		connect()
-	}
+	for {
+		if Connection().Response.Close {
+			log.Printf("Detected closed salt connection. Terminating process...")
+			break
+		}
 
-	line, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatal("Error reading event" + err.Error())
-	} else {
-		if strings.Contains(line, "retry") {
-			return
-		} else if strings.Contains(line, "tag") {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatal("Error reading event" + err.Error())
+		} else {
+			if strings.Contains(line, "retry") {
+				continue
+			} else if strings.Contains(line, "tag") {
 
-			line2, err := reader.ReadString('\n')
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			if strings.Contains(line2, "data") {
-
-				jsonString := line2[5:]
-				var event SaltEvent
-
-				err := json.Unmarshal([]byte(jsonString), &event)
+				line2, err := reader.ReadString('\n')
 				if err != nil {
-					log.Fatal("Error unmarshalling event" + err.Error())
+					log.Fatal(err)
 				}
-				events <- event
+
+				if strings.Contains(line2, "data") {
+
+					jsonString := line2[5:]
+					var event SaltEvent
+
+					err := json.Unmarshal([]byte(jsonString), &event)
+					if err != nil {
+						log.Fatal("Error unmarshalling event" + err.Error())
+					}
+					events <- event
+				}
+			} else if len(line) < 1 {
+				continue
 			}
-		} else if len(line) < 1 {
-			return
 		}
 	}
+	return
 }
