@@ -16,6 +16,21 @@ import (
 	"github.com/dgraph-io/badger/table"
 )
 
+func Listen(events chan salt.SaltEvent, done chan bool, signal sync.WaitGroup) {
+
+	var event salt.SaltEvent
+
+	for {
+		select {
+		case <-done:
+			Store().Close()
+			break
+		case event = <-events:
+			UpdateStoreBySalt(event)
+		}
+	}
+	signal.Done()
+}
 func UpdateStoreBySalt(event salt.SaltEvent) error {
 	return nil
 }

@@ -2,6 +2,10 @@ package main
 
 import (
 	"net/http"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 
 	"github.com/byuoitav/authmiddleware"
 	"github.com/byuoitav/monster-monitoring-service/handlers"
@@ -15,11 +19,23 @@ func main() {
 
 	store.OnStart()
 
+	var control sync.WaitGroup
+
+	signals := make(chan os.Signal, 1)
 	timer := make(chan bool, 1)
+	signal.Notify(signals, syscall.SIGTERM)
 
-	go salt.Start(timer)
+	go func() {
+		<-signals
+		timer <- true
+		control.Wait()
+		os.Exit(0)
+	}()
 
-	go salt.Listen()
+	events := make(chan salt.SaltEvent)
+	control.Add(2)
+	go salt.Listen(events, timer, control)
+	go store.Listen(events, timer, control)
 
 	port := ":10000"
 	router := echo.New()

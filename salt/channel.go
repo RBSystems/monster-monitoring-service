@@ -7,13 +7,31 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
+	"sync"
 )
 
-func Listen() {
+func Listen(events chan SaltEvent, done chan bool, signal sync.WaitGroup) {
 
+	var once *sync.Once
+
+	for {
+		select {
+		case <-done:
+			log.Printf("SIGTERM interrupt detected. Closing connection to salt...")
+			Connection().Response.Body.Close()
+			break
+		default:
+			once.Do(connect)
+			listenSalt(events)
+		}
+	}
+	signal.Done()
+}
+
+var reader *bufio.Reader
+
+func connect() {
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -33,68 +51,42 @@ func Listen() {
 		return
 	}
 
-	reader := bufio.NewReader(Connection().Response.Body)
-	for {
+	reader = bufio.NewReader(Connection().Response.Body)
+}
 
-		if Connection().Response.Close {
-			log.Printf("Detected closed salt connection. Exiting...")
-			break
-		}
+func listenSalt(events chan SaltEvent) {
 
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			log.Fatal("Error reading event" + err.Error())
-		} else {
-			if strings.Contains(line, "retry") {
-				continue
-			} else if strings.Contains(line, "tag") {
+	if Connection().Response.Close {
+		log.Printf("Detected closed salt connection. Reconnecting...")
+		connect()
+	}
 
-				line2, err := reader.ReadString('\n')
-				if err != nil {
-					log.Fatal(err)
-				}
+	line, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatal("Error reading event" + err.Error())
+	} else {
+		if strings.Contains(line, "retry") {
+			return
+		} else if strings.Contains(line, "tag") {
 
-				if strings.Contains(line2, "data") {
-
-					jsonString := line2[5:]
-					var event SaltEvent
-
-					err := json.Unmarshal([]byte(jsonString), &event)
-					if err != nil {
-						log.Fatal("Error unmarshalling event" + err.Error())
-					}
-
-					//					err = store.UpdateStoreBySalt(event)
-					if err != nil {
-						log.Printf("Error writing to badger store: %s", err.Error())
-					}
-
-				}
-			} else if len(line) < 1 {
-				continue
+			line2, err := reader.ReadString('\n')
+			if err != nil {
+				log.Fatal(err)
 			}
+
+			if strings.Contains(line2, "data") {
+
+				jsonString := line2[5:]
+				var event SaltEvent
+
+				err := json.Unmarshal([]byte(jsonString), &event)
+				if err != nil {
+					log.Fatal("Error unmarshalling event" + err.Error())
+				}
+				events <- event
+			}
+		} else if len(line) < 1 {
+			return
 		}
 	}
-}
-
-func Start(timer chan bool) {
-
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, syscall.SIGTERM)
-
-	go Wait(signals, timer)
-	<-timer
-	log.Printf("SIGTERM interrupt detected. Exiting...")
-
-	//store.Store().Close()
-	//(*Connection().Connection).Close()
-	Connection().Response.Body.Close()
-	os.Exit(0)
-
-}
-
-func Wait(signals chan os.Signal, timer chan bool) {
-
-	<-signals
-	timer <- true
 }
