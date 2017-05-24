@@ -18,20 +18,29 @@ import (
 
 func Listen(events chan salt.SaltEvent, done chan bool, signal sync.WaitGroup) {
 
+	log.Printf("Listening for events...")
+
 	var event salt.SaltEvent
 
 	for {
 		select {
 		case <-done:
+			log.Printf("SIGTERM signal detected. Closing connection to salt...")
 			Store().Close()
 			break
 		case event = <-events:
-			UpdateStoreBySalt(event)
+			err := UpdateStoreBySalt(event)
+			if err != nil {
+				log.Printf("Error updating store: %s", err.Error())
+			}
 		}
 	}
 	signal.Done()
 }
 func UpdateStoreBySalt(event salt.SaltEvent) error {
+
+	log.Printf("Adding event %s to store", event.Tag)
+
 	return nil
 }
 

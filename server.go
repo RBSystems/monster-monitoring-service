@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -27,7 +28,9 @@ func main() {
 	signal.Notify(signals, syscall.SIGTERM)
 
 	go func() {
+		log.Printf("Waiting for SIGTERM signal...")
 		<-signals
+		log.Printf("Nuclear launch detected. Firing interceptors...")
 		for i := 0; i < NUM_PROCESSES; i++ {
 			timer <- true
 		}

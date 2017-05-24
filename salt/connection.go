@@ -27,6 +27,8 @@ type LoginResponse struct {
 }
 
 type SaltEvent struct {
+	Tag  string                 `json:"tag"`
+	Data map[string]interface{} `json:"data"`
 }
 
 //singleton instance of salt connection
@@ -35,6 +37,7 @@ var once sync.Once
 
 func Connection() *SaltConnection {
 	once.Do(func() {
+		log.Printf("Logging into salt...")
 		connection.Login()
 	})
 	return connection

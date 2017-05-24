@@ -13,17 +13,27 @@ import (
 
 func Listen(events chan SaltEvent, done chan bool, signal sync.WaitGroup) {
 
-	var read, listener *sync.Once
+	log.Printf("Starting salt routine...")
+
+	//	var read, listener *sync.Once
+	var read sync.Once
+	var listener *sync.Once
 
 	for {
 		select {
 		case <-done:
-			log.Printf("SIGTERM interrupt detected. Closing connection to salt...")
+			log.Printf("SIGTERM signal detected. Closing connection to salt...")
 			Connection().Response.Body.Close()
 			break
 		default:
-			read.Do(connect)
-			listener.Do(func() { go listenSalt(events) })
+			log.Printf("Default")
+			read.Do(func() {
+				log.Printf("Please don't panic")
+				connect()
+			})
+			listener.Do(func() {
+				go listenSalt(events)
+			})
 		}
 	}
 	signal.Done()
@@ -32,6 +42,9 @@ func Listen(events chan SaltEvent, done chan bool, signal sync.WaitGroup) {
 var reader *bufio.Reader
 
 func connect() {
+
+	log.Printf("Subscribing to salt...")
+
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -56,7 +69,14 @@ func connect() {
 
 func listenSalt(events chan SaltEvent) {
 
+	log.Printf("Reading salt events...")
+
 	for {
+		if reader == nil {
+			log.Printf("Reader not initialized. Waiting for connection...")
+			continue
+		}
+
 		if Connection().Response.Close {
 			log.Printf("Detected closed salt connection. Terminating process...")
 			break
