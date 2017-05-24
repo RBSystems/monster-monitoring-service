@@ -10,8 +10,6 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
-
-	"github.com/byuoitav/monster-monitoring-service/badger"
 )
 
 func Listen() {
@@ -66,7 +64,7 @@ func Listen() {
 						log.Fatal("Error unmarshalling event" + err.Error())
 					}
 
-					err = badger.UpdateStoreBySalt(event)
+					//					err = store.UpdateStoreBySalt(event)
 					if err != nil {
 						log.Printf("Error writing to badger store: %s", err.Error())
 					}
@@ -88,7 +86,7 @@ func Start(timer chan bool) {
 	<-timer
 	log.Printf("SIGTERM interrupt detected. Exiting...")
 
-	badger.Store().Close()
+	//store.Store().Close()
 	//(*Connection().Connection).Close()
 	Connection().Response.Body.Close()
 	os.Exit(0)

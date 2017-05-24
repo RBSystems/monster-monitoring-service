@@ -5,15 +5,15 @@ import (
 
 	"github.com/byuoitav/authmiddleware"
 	"github.com/byuoitav/monster-monitoring-service/handlers"
-	"github.com/byuoitav/monster-monitoring-service/helpers"
 	"github.com/byuoitav/monster-monitoring-service/salt"
+	"github.com/byuoitav/monster-monitoring-service/store"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
 
-	helpers.OnStart()
+	store.OnStart()
 
 	timer := make(chan bool, 1)
 
