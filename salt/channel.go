@@ -16,22 +16,22 @@ func Listen(events chan SaltEvent, done chan bool, signal sync.WaitGroup) {
 	log.Printf("Starting salt routine...")
 
 	//	var read, listener *sync.Once
-	var read sync.Once
-	var listener *sync.Once
+	var read, listen, close sync.Once
 
 	for {
 		select {
 		case <-done:
-			log.Printf("SIGTERM signal detected. Closing connection to salt...")
-			Connection().Response.Body.Close()
+			close.Do(func() {
+				log.Printf("SIGTERM signal detected. Closing connection to salt...")
+				Connection().Response.Body.Close()
+			})
 			break
 		default:
-			log.Printf("Default")
 			read.Do(func() {
 				log.Printf("Please don't panic")
 				connect()
 			})
-			listener.Do(func() {
+			listen.Do(func() {
 				go listenSalt(events)
 			})
 		}

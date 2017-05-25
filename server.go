@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"sync"
-	"syscall"
 
 	"github.com/byuoitav/authmiddleware"
 	"github.com/byuoitav/monster-monitoring-service/handlers"
@@ -25,11 +24,12 @@ func main() {
 
 	signals := make(chan os.Signal, 1)
 	timer := make(chan bool, 1)
-	signal.Notify(signals, syscall.SIGTERM)
 
 	go func() {
 		log.Printf("Waiting for SIGTERM signal...")
-		<-signals
+		signal.Notify(signals, os.Interrupt)
+		output := <-signals
+		log.Printf("output: %v", output)
 		log.Printf("Nuclear launch detected. Firing interceptors...")
 		for i := 0; i < NUM_PROCESSES; i++ {
 			timer <- true

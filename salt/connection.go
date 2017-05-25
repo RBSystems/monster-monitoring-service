@@ -38,6 +38,7 @@ var once sync.Once
 func Connection() *SaltConnection {
 	once.Do(func() {
 		log.Printf("Logging into salt...")
+		connection = &SaltConnection{}
 		connection.Login()
 	})
 	return connection

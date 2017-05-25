@@ -21,12 +21,15 @@ func Listen(events chan salt.SaltEvent, done chan bool, signal sync.WaitGroup) {
 	log.Printf("Listening for events...")
 
 	var event salt.SaltEvent
+	var listen sync.Once
 
 	for {
 		select {
 		case <-done:
-			log.Printf("SIGTERM signal detected. Closing connection to salt...")
-			Store().Close()
+			listen.Do(func() {
+				log.Printf("SIGTERM signal detected. Closing store...")
+				Store().Close()
+			})
 			break
 		case event = <-events:
 			err := UpdateStoreBySalt(event)
