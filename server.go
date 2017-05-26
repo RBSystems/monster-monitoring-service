@@ -34,8 +34,8 @@ func main() {
 		for i := 0; i < NUM_PROCESSES; i++ {
 			timer <- true
 		}
-		control.Wait()
-		os.Exit(0)
+		//	control.Wait()
+		//	os.Exit(0)
 	}()
 
 	events := make(chan salt.SaltEvent)
@@ -61,4 +61,5 @@ func main() {
 	}
 
 	router.StartServer(&server)
+	control.Wait()
 }
