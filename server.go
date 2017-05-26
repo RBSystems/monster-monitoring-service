@@ -24,10 +24,10 @@ func main() {
 
 	signals := make(chan os.Signal, 1)
 	timer := make(chan bool, 1)
+	signal.Notify(signals, os.Interrupt)
 
 	go func() {
 		log.Printf("Waiting for SIGTERM signal...")
-		signal.Notify(signals, os.Interrupt)
 		output := <-signals
 		log.Printf("output: %v", output)
 		log.Printf("Nuclear launch detected. Firing interceptors...")
@@ -40,8 +40,8 @@ func main() {
 
 	events := make(chan salt.SaltEvent)
 	control.Add(NUM_PROCESSES)
-	go salt.Listen(events, timer, control)
-	go store.Listen(events, timer, control)
+	go salt.Listen(events, timer, &control)
+	go store.Listen(events, timer, &control)
 
 	port := ":10000"
 	router := echo.New()

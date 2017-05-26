@@ -16,7 +16,7 @@ import (
 	"github.com/dgraph-io/badger/table"
 )
 
-func Listen(events chan salt.SaltEvent, done chan bool, signal sync.WaitGroup) {
+func Listen(events chan salt.SaltEvent, done chan bool, signal *sync.WaitGroup) {
 
 	log.Printf("Listening for events...")
 

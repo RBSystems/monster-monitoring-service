@@ -11,7 +11,7 @@ import (
 	"sync"
 )
 
-func Listen(events chan SaltEvent, done chan bool, signal sync.WaitGroup) {
+func Listen(events chan SaltEvent, done chan bool, signal *sync.WaitGroup) {
 
 	log.Printf("Starting salt routine...")
 
