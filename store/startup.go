@@ -1,11 +1,10 @@
-package helpers
+package store
 
 import (
 	"log"
 
 	"github.com/byuoitav/av-api/dbo"
 	"github.com/byuoitav/av-api/status"
-	"github.com/byuoitav/monster-monitoring-service/badger"
 )
 
 func OnStart() {
@@ -34,7 +33,7 @@ func OnStart() {
 			}
 
 			log.Printf("Adding room %s to Badger...", room.Name)
-			err = badger.UpdateStoreByRoom(roomStatus)
+			err = UpdateStoreByRoom(roomStatus)
 			if err != nil {
 				log.Printf("Error adding room: %s in building: %s to Badger: %s", building.Name, room.Name, err.Error())
 			}
